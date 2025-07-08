@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as DocumentsRouteImport } from './routes/documents'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DocumentsIndexRouteImport } from './routes/documents/index'
 import { Route as DocumentsDocumentIdRouteImport } from './routes/documents/$documentId'
 
 const DocumentsRoute = DocumentsRouteImport.update({
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocumentsIndexRoute = DocumentsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DocumentsRoute,
+} as any)
 const DocumentsDocumentIdRoute = DocumentsDocumentIdRouteImport.update({
   id: '/$documentId',
   path: '/$documentId',
@@ -33,24 +39,26 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/documents': typeof DocumentsRouteWithChildren
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
+  '/documents/': typeof DocumentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/documents': typeof DocumentsRouteWithChildren
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
+  '/documents': typeof DocumentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/documents': typeof DocumentsRouteWithChildren
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
+  '/documents/': typeof DocumentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/documents' | '/documents/$documentId'
+  fullPaths: '/' | '/documents' | '/documents/$documentId' | '/documents/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/documents' | '/documents/$documentId'
-  id: '__root__' | '/' | '/documents' | '/documents/$documentId'
+  to: '/' | '/documents/$documentId' | '/documents'
+  id: '__root__' | '/' | '/documents' | '/documents/$documentId' | '/documents/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -74,6 +82,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/documents/': {
+      id: '/documents/'
+      path: '/'
+      fullPath: '/documents/'
+      preLoaderRoute: typeof DocumentsIndexRouteImport
+      parentRoute: typeof DocumentsRoute
+    }
     '/documents/$documentId': {
       id: '/documents/$documentId'
       path: '/$documentId'
@@ -86,10 +101,12 @@ declare module '@tanstack/react-router' {
 
 interface DocumentsRouteChildren {
   DocumentsDocumentIdRoute: typeof DocumentsDocumentIdRoute
+  DocumentsIndexRoute: typeof DocumentsIndexRoute
 }
 
 const DocumentsRouteChildren: DocumentsRouteChildren = {
   DocumentsDocumentIdRoute: DocumentsDocumentIdRoute,
+  DocumentsIndexRoute: DocumentsIndexRoute,
 }
 
 const DocumentsRouteWithChildren = DocumentsRoute._addFileChildren(

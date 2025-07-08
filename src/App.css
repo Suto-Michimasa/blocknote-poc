@@ -270,3 +270,15 @@
     gap: 8px;
   }
 }
+
+/* Saving Indicator */
+.saving-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #6c757d;
+}
+
+.saving-text {
+  font-size: 0.875rem;
+}

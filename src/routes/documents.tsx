@@ -1,19 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
+import { createFileRoute, Outlet } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/documents')({
-  component: Documents,
+  component: DocumentsLayout,
 })
 
-function Documents() {
-  return (
-    <div className="p-2">
-      <h3>Documents</h3>
-      <div className="mt-4">
-        <Link to="/documents/$documentId" params={{ documentId: 'example-doc' }} className="text-blue-600 hover:underline">
-          Example Document
-        </Link>
-      </div>
-    </div>
-  )
+function DocumentsLayout() {
+  return <Outlet />
 }
