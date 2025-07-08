@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Convex
+.env.local
+convex/_generated
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
